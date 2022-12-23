@@ -2,8 +2,8 @@ const puppeteer = require("puppeteer");
 const { tableParser } = require("puppeteer-table-parser");
 
 const LOGIN_PAGE_URL = "https://ogmoes.com.br/intranet//Login.aspx";
-const USER_LOGIN = "4272";
-const USER_PASSWORD = "3233";
+const USER_LOGIN = "";
+const USER_PASSWORD = "";
 
 function delay(time) {
   return new Promise(function (resolve) {
