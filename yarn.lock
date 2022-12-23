@@ -526,6 +526,11 @@ puppeteer-core@19.4.1:
     unbzip2-stream "1.4.3"
     ws "8.11.0"
 
+puppeteer-table-parser@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/puppeteer-table-parser/-/puppeteer-table-parser-2.1.0.tgz#57fe1e67f916667adc97e150f7175d456c2f0cc5"
+  integrity sha512-2A4Y3wCGkmi7LQAWdIJBVFxrOnJCRgZR1FZbdPlymsvGEdM0+wudRLy5cV2Lsxu3Z1HgXslYtGu4QNr+EyaTWg==
+
 puppeteer@^19.4.1:
   version "19.4.1"
   resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-19.4.1.tgz#cac7d3f0084badebb8ebacbe6f4d7262e7f21818"
