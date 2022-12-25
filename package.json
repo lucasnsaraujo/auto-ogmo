@@ -5,10 +5,17 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "node-cron": "^3.0.2",
     "nodemon": "^2.0.20",
+    "pg": "^8.8.0",
     "puppeteer": "^19.4.1"
   },
   "scripts": {
-    "start": "nodemon src/index.js"
-  }
+    "start": "USER_LOGIN=4272 USER_PASSWORD=3233 nodemon src/index.js"
+  },
+  "devDependencies": {},
+  "repository": "https://github.com/lucasnsaraujo/auto-ogmo.git",
+  "author": "Lucas Nascimento Araujo <lucas.araujo@codenapp.com>"
 }
