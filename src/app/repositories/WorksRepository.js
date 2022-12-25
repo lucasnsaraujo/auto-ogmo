@@ -1,17 +1,11 @@
-class WorksRepository {
-    async findAll() {
+import db from "../../database/index";
 
-    }
-    async findById() {
-        
-    }
-    async create(user) {
-  
-    }
-    async update(id, data) {
-  
-    }
-    async delete(id) {
-  
-    }
+class WorksRepository {
+  async findAll() {}
+  async findById() {}
+  async create(user) {
+    
+  }
+  async update(id, data) {}
+  async delete(id) {}
 }

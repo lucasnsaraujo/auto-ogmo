@@ -1,16 +1,21 @@
-import { Client } from 'pg'
+import pg from 'pg'
+
+const { Client } = pg
 
 const client = new Client({
     host: 'localhost',
     port: 5432,
-    user: 'root',
+    user: 'postgres',
     password: '03100123',
-    database: 'ogmodb'
+    database: 'ogmo'
 })
 
 client.connect();
 
-export const query = async (query) => {
+const query = async (query) => {
     const { rows } = await client.query(query);
     return rows;
 }
+
+const db = {query}
+export default db;
