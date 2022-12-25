@@ -9,6 +9,6 @@
     "puppeteer": "^19.4.1"
   },
   "scripts": {
-    "start": "USER_LOGIN=4272 USER_PASSWORD=3233 nodemon ./functions/crawlWorkData.js"
+    "start": "nodemon src/index.js"
   }
 }
