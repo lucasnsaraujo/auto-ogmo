@@ -1,16 +1,14 @@
-const puppeteer = require("puppeteer");
+import puppeteer from "puppeteer";
 
 const LOGIN_PAGE_URL = "https://ogmoes.com.br/intranet//Login.aspx";
-const USER_LOGIN = "";
-const USER_PASSWORD = "";
 
-async function getWorkData() {
+async function crawlWorkData({user_login, user_password}) {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   await page.goto(LOGIN_PAGE_URL, { waitUntil: "networkidle2" });
 
-  await page.type("#txtLogin", USER_LOGIN);
-  await page.type("#txtSenha", USER_PASSWORD);
+  await page.type("#txtLogin", user_login);
+  await page.type("#txtSenha", user_password);
 
   // As the documentation recommends, wait for page to load after clicking on login button
   await Promise.all([
@@ -67,8 +65,8 @@ async function getWorkData() {
 }
   await browser.close();
 
-  console.log({user, data})
-  return {user, data}
+  console.log({...user, data})
+  return {...user, data}
 };
 
-getWorkData();
+export default { crawlWorkData }

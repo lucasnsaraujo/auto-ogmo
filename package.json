@@ -1,5 +1,6 @@
 {
   "name": "bot-porto",
+  "type": "module",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -8,6 +9,6 @@
     "puppeteer": "^19.4.1"
   },
   "scripts": {
-    "start": "nodemon crawler.js"
+    "start": "USER_LOGIN=4272 USER_PASSWORD=3233 nodemon ./functions/crawlWorkData.js"
   }
 }
