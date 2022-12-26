@@ -1,11 +1,18 @@
 import UsersRepository from "../repositories/UsersRepository.js";
 class UserController {
-  async index(request, response) {}
-  async show(request, response) {}
+  async index(request, response) {
+    const users = await UsersRepository.findAll();
+    return response.status(200).json(users);
+  }
+  async show(request, response) {
+    const { id } = request.params;
+    const user = await UsersRepository.findById(id);
+    console.log(user);
+    return response.status(200).json(user);
+  }
 
   async store(request, response) {
     const data = request.body;
-    const isBodyValid = checkIfHasAllParameters(data);
 
     const {
       name,
@@ -17,6 +24,23 @@ class UserController {
       user_password,
     } = data;
 
+    const userExists = await UsersRepository.findByEmail(email);
+    if (userExists) {
+      return response
+        .status(400)
+        .json({ error: "This e-mail is already being used" });
+    }
+
+    const phoneNumberExists = await UsersRepository.findByPhoneNumber(
+      phone_number
+    );
+    if (phoneNumberExists) {
+      return response
+        .status(400)
+        .json({ error: "This phone number is already being used" });
+    }
+
+    const isBodyValid = checkIfHasAllParameters(data);
     if (isBodyValid) {
       const user = await UsersRepository.create({
         name,
@@ -36,8 +60,30 @@ class UserController {
     }
   }
 
-  async update(request, response) {}
-  async delete(request, response) {}
+  async update(request, response) {
+    const { id } = request.params;
+    const data = request.body;
+
+    const isBodyValid = checkIfHasAllParameters(data);
+    if (isBodyValid && id) {
+      const user = await UsersRepository.update(id, data);
+      return response.status(200).json(user);
+    } else {
+      return response.status(400).json({
+        error: "Some attributes are missing",
+        required: USER_MODEL,
+      });
+    }
+  }
+  async delete(request, response) {
+    const { id } = request.params;
+    if (id) {
+      await UsersRepository.delete(id);
+      return response.status(200);
+    } else {
+      return response.status(400).json({ error: "Invalid ID" });
+    }
+  }
 }
 
 function checkIfHasAllParameters(data) {

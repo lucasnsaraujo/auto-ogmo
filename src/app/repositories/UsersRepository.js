@@ -1,5 +1,31 @@
 import db from "../../database/index.js";
 class UsersRepository {
+  async updateLastTimestamp(id) {
+    const [row] = await db.query({
+      text: `
+    INSERT INTO users (last_update)
+    VALUES (CURRENT_TIMESTAMP)
+    WHERE id = $1
+    RETURNING *
+    `,
+      values: [id],
+    });
+    return row;
+  }
+  async findByPhoneNumber(phone_number) {
+    const [row] = await db.query({
+      text: `SELECT * FROM users WHERE phone_number = $1`,
+      values: [phone_number],
+    });
+    return row;
+  }
+  async findByEmail(email) {
+    const [row] = await db.query({
+      text: `SELECT * FROM users WHERE email = $1`,
+      values: [email],
+    });
+    return row;
+  }
   async findAll() {
     const row = await db.query(`SELECT * FROM users`);
     return row;

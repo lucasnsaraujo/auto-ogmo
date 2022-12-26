@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_login VARCHAR NOT NULL,
     user_password VARCHAR NOT NULL,
-    should_update BOOLEAN NOT NULL DEFAULT true
+    should_update BOOLEAN NOT NULL DEFAULT true,
+    last_update TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS work_request (
