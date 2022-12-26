@@ -28,4 +28,4 @@ export async function getAllUsersWorkData() {
 }
 
 const checkWorkDataStatus = (status) =>
-  status && status.toLowerCase().includes("aguarde") ? "waiting" : "assigned";
+  status && status.toLowerCase().includes("embarcado") ? "assigned" : "waiting";
