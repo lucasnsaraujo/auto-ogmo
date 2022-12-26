@@ -5,13 +5,13 @@ import { crawlWorkData } from "./crawlWorkData.js";
 export async function getAllUsersWorkData() {
   const users = await UsersRepository.findUsersShouldUpdate();
   if (users.length) {
-    await users.forEach(async (user) => {
+    for (const user of users) {
       const crawledData = await crawlWorkData({
         user_login: user?.user_login,
         user_password: user?.user_password,
       });
       if (crawledData) {
-        const currentStatus = checkWorkDataStatus(crawledData.data.status);
+        const currentStatus = checkWorkDataStatus(crawledData?.data?.status);
         if (currentStatus === "assigned") {
           await WorksRepository.create({
             ...crawledData.data,
@@ -21,11 +21,11 @@ export async function getAllUsersWorkData() {
           console.log(`> Novo work criado! => ${crawledData.name}`);
         }
       }
-    });
+    }
   } else {
     console.log("> No update users found");
   }
 }
 
 const checkWorkDataStatus = (status) =>
-  status.toLowerCase().includes("aguarde") ? "waiting" : "assigned";
+  status && status.toLowerCase().includes("aguarde") ? "waiting" : "assigned";
