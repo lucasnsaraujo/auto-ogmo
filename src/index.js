@@ -16,8 +16,6 @@ ns.scheduleJob("*/10 * * * * *", async () => {
   await getAllUsersWorkData();
 });
 
-const PORT = 1234;
-
-app.listen(PORT, () => {
+app.listen(process.env.PORT, () => {
   console.log(`> 💻 AutoOgmoAPI started @ http://localhost:${PORT}`);
 });
