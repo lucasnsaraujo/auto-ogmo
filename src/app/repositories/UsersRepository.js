@@ -94,15 +94,13 @@ class UsersRepository {
     });
   }
   async delete(id) {
-    const deleteOperation = await db.query({
+    await db.query({
       text: `
       DELETE FROM users 
       WHERE id = $1
     `,
       values: [id],
     });
-
-    return deleteOperation;
   }
 }
 

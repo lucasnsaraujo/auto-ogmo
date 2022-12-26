@@ -7,8 +7,11 @@ class UserController {
   async show(request, response) {
     const { id } = request.params;
     const user = await UsersRepository.findById(id);
-    console.log(user);
-    return response.status(200).json(user);
+    if (user) {
+      return response.status(200).json(user);
+    } else {
+      return response.status(400).json({ error: "User not found" });
+    }
   }
 
   async store(request, response) {
@@ -77,6 +80,7 @@ class UserController {
   }
   async delete(request, response) {
     const { id } = request.params;
+    console.log({ id });
     if (id) {
       await UsersRepository.delete(id);
       return response.status(200);
