@@ -1,10 +1,18 @@
 import db from "../../database/index.js";
 class UsersRepository {
+  async findUsersShouldUpdate() {
+    const row = await db.query(`
+    SELECT * FROM users 
+    WHERE (should_update = true) 
+    AND (last_update <= (CURRENT_TIMESTAMP - interval '5 hours') OR last_update IS NULL);
+    `);
+    return row;
+  }
   async updateLastTimestamp(id) {
     const [row] = await db.query({
       text: `
-    INSERT INTO users (last_update)
-    VALUES (CURRENT_TIMESTAMP)
+    UPDATE users 
+    SET last_update = CURRENT_TIMESTAMP
     WHERE id = $1
     RETURNING *
     `,
@@ -38,65 +46,30 @@ class UsersRepository {
     return row;
   }
   async create(user) {
-    const {
-      name,
-      company_id,
-      company_role,
-      email,
-      phone_number,
-      user_login,
-      user_password,
-    } = user;
+    const { name, email, phone_number, user_login, user_password } = user;
     const [row] = await db.query({
       text: ` 
-          INSERT INTO users (name, company_id, company_role, email, phone_number, user_login, user_password)
-          VALUES ($1, $2, $3, $4, $5, $6, $7) 
+          INSERT INTO users (name, email, phone_number, user_login, user_password)
+          VALUES ($1, $2, $3, $4, $5) 
           RETURNING * 
           `,
-      values: [
-        name,
-        company_id,
-        company_role,
-        email,
-        phone_number,
-        user_login,
-        user_password,
-      ],
+      values: [name, email, phone_number, user_login, user_password],
     });
     return row;
   }
   async update(id, data) {
-    const {
-      name,
-      company_id,
-      company_role,
-      email,
-      phone_number,
-      user_login,
-      user_password,
-    } = data;
+    const { name, email, phone_number, user_login, user_password } = data;
     const [row] = await db.query({
       text: `UPDATE users
       SET name = $1, 
-      company_id = $2, 
-      company_role = $3, 
-      email = $4, 
-      phone_number = $5, 
-      user_login = $6, 
-      user_password = $7
-      WHERE id = $8
+      email = $2, 
+      phone_number = $3, 
+      user_login = $4, 
+      user_password = $5
+      WHERE id = $6
       RETURNING *
       `,
-      values: [
-        name,
-        company_id,
-        company_role,
-        email,
-        phone_number,
-        user_login,
-        user_password,
-        id,
-      ],
+      values: [name, email, phone_number, user_login, user_password, id],
     });
     return row;
   }

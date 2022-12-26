@@ -17,15 +17,7 @@ class UserController {
   async store(request, response) {
     const data = request.body;
 
-    const {
-      name,
-      company_id,
-      company_role,
-      email,
-      phone_number,
-      user_login,
-      user_password,
-    } = data;
+    const { name, email, phone_number, user_login, user_password } = data;
 
     const userExists = await UsersRepository.findByEmail(email);
     if (userExists) {
@@ -47,8 +39,6 @@ class UserController {
     if (isBodyValid) {
       const user = await UsersRepository.create({
         name,
-        company_id,
-        company_role,
         email,
         phone_number,
         user_login,
@@ -88,8 +78,6 @@ class UserController {
 function checkIfHasAllParameters(data) {
   if (
     !data.name ||
-    !data.company_id ||
-    !data.company_role ||
     !data.email ||
     !data.phone_number ||
     !data.user_login ||
@@ -101,8 +89,6 @@ function checkIfHasAllParameters(data) {
 }
 const USER_MODEL = [
   "name",
-  "company_id",
-  "company_role",
   "email",
   "phone_number",
   "user_login",
