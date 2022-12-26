@@ -35,12 +35,14 @@ class UsersRepository {
     return row;
   }
   async findAll() {
-    const row = await db.query(`SELECT * FROM users`);
+    const row = await db.query(
+      `SELECT id, name, email, phone_number, created_at, last_update FROM users`
+    );
     return row;
   }
   async findById(id) {
     const [row] = await db.query({
-      text: `SELECT * FROM users WHERE id = $1`,
+      text: `SELECT id, name, email, phone_number, created_at, last_update FROM users WHERE id = $1`,
       values: [id],
     });
     return row;

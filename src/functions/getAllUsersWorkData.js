@@ -19,6 +19,8 @@ export async function getAllUsersWorkData() {
           });
           await UsersRepository.updateLastTimestamp(user.id);
           console.log(`> Novo work criado! => ${crawledData.name}`);
+        } else {
+          console.log(`> Sem atualizações no user: ${crawledData.name}`);
         }
       }
     }
