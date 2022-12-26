@@ -13,7 +13,7 @@
     "puppeteer": "^19.4.1"
   },
   "scripts": {
-    "start": "USER_LOGIN=4272 USER_PASSWORD=3233 nodemon src/index.js"
+    "start": "nodemon src/index.js"
   },
   "devDependencies": {},
   "repository": "https://github.com/lucasnsaraujo/auto-ogmo.git",

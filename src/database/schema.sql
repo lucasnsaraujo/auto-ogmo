@@ -31,6 +31,6 @@ CREATE TABLE IF NOT EXISTS work_request (
     cais VARCHAR,
     requisitante VARCHAR,
     status VARCHAR,
-    worker_id UUID,
+    worker_id UUID NOT NULL,
     FOREIGN KEY(worker_id) REFERENCES users(id)
 );
