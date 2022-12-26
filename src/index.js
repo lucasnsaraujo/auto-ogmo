@@ -16,5 +16,5 @@ ns.scheduleJob("*/10 * * * *", async () => {
 });
 
 app.listen(process.env.PORT, () => {
-  console.log(`> 💻 AutoOgmoAPI started @ http://localhost:${PORT}`);
+  console.log(`> 💻 AutoOgmoAPI started @ port ${process.env.PORT}`);
 });
