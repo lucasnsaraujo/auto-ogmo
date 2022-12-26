@@ -76,8 +76,14 @@ class UsersRepository {
       user_password,
     } = data;
     const [row] = await db.query({
-      text: `INSERT INTO users (name, company_id, company_role, email, phone_number, user_login, user_password)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      text: `UPDATE users
+      SET name = $1, 
+      company_id = $2, 
+      company_role = $3, 
+      email = $4, 
+      phone_number = $5, 
+      user_login = $6, 
+      user_password = $7
       WHERE id = $8
       RETURNING *
       `,
@@ -92,15 +98,17 @@ class UsersRepository {
         id,
       ],
     });
+    return row;
   }
   async delete(id) {
-    await db.query({
+    const deleteOperation = await db.query({
       text: `
       DELETE FROM users 
       WHERE id = $1
     `,
       values: [id],
     });
+    return deleteOperation;
   }
 }
 

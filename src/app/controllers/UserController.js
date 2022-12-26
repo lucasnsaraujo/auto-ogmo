@@ -80,13 +80,8 @@ class UserController {
   }
   async delete(request, response) {
     const { id } = request.params;
-    console.log({ id });
-    if (id) {
-      await UsersRepository.delete(id);
-      return response.status(200);
-    } else {
-      return response.status(400).json({ error: "Invalid ID" });
-    }
+    await UsersRepository.delete(id);
+    return response.sendStatus(200);
   }
 }
 
