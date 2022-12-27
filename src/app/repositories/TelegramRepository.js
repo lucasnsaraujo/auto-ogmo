@@ -1,26 +1,27 @@
-import db from "../../database";
+import db from "../../database/index.js";
 
 class TelegramRepository {
-  async generateUniqueKey({ length = 6 }) {
+  async _generateUniqueKey(length = 6) {
     // Generated random key (default: 6 characters)
     function generateRandom() {
       const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
       let generatedKey = "";
       for (let i = 0; i < length; i++) {
         generatedKey +=
-          characters[Math.floor(Math.random() * characters.length)];
+          characters[Math.floor(Math.random() * characters?.length)];
       }
       return generatedKey;
     }
 
     // Confirms if this key has not been generated before to any other user
-    let generatedRandomKey = generateRandom();
-    let generatedKeysInDb = await this.findByConfirmationKey(generatedKey);
-    while (generatedKeysInDb.includes(generatedRandomKey)) {
-      generatedRandomKey = generateRandom();
+    let key = generateRandom();
+    let generatedKeysInDb = await this.findByActivationKey(key);
+    console.log({ key, generatedKeysInDb });
+    while (generatedKeysInDb && generatedKeysInDb?.["activation_key"] === key) {
+      key = generateRandom();
     }
 
-    return generatedRandomKey;
+    return key;
   }
 
   async findAll() {
@@ -37,26 +38,38 @@ class TelegramRepository {
     });
     return row;
   }
-  async findByConfirmationKey(confirmationKey) {
+  async findByActivationKey(activationKey) {
     const [row] = await db.query({
       text: `
         SELECT * FROM telegram
-        WHERE confirmation_key = $1
+        WHERE activation_key = $1
         `,
-      values: [confirmationKey],
+      values: [activationKey],
     });
-    return row;
+    return typeof row !== "undefined" ? row : null;
   }
-  async generateConfirmationKey(id) {
-    const confirmationKey = this.generateUniqueKey();
+  async updateActivationKey(id) {
+    const activationKey = await this._generateUniqueKey();
     const [row] = await db.query({
       text: `
       UPDATE telegram
-      SET confirmation_key = $1
+      SET activation_key = $1
       WHERE user_id = $2
       RETURNING *;
       `,
-      values: [confirmationKey, id],
+      values: [activationKey, id],
+    });
+    return row;
+  }
+  async generateActivationKey(id) {
+    const activationKey = await this._generateUniqueKey();
+    const [row] = await db.query({
+      text: `
+      INSERT INTO telegram (user_id, activation_key)
+      VALUES ($1, $2)
+      RETURNING *;
+      `,
+      values: [id, activationKey],
     });
     return row;
   }

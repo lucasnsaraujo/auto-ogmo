@@ -3,7 +3,7 @@ class UsersRepository {
   async findUsersShouldUpdate() {
     const row = await db.query(`
     SELECT * FROM users 
-    WHERE (should_update = true) 
+    WHERE (active = true) 
     AND (last_update <= (CURRENT_TIMESTAMP - interval '5 hours') OR last_update IS NULL);
     `);
     return row;
@@ -42,7 +42,7 @@ class UsersRepository {
   }
   async findById(id) {
     const [row] = await db.query({
-      text: `SELECT id, name, email, phone_number, created_at, last_update FROM users WHERE id = $1`,
+      text: `SELECT id, active, name, email, phone_number, created_at, last_update FROM users WHERE id = $1`,
       values: [id],
     });
     return row;

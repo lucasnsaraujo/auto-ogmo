@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_login VARCHAR NOT NULL,
     user_password VARCHAR NOT NULL,
-    should_update BOOLEAN NOT NULL DEFAULT true,
+    active BOOLEAN NOT NULL DEFAULT true,
     last_update TIMESTAMP
 );
 
@@ -36,6 +36,6 @@ CREATE TABLE IF NOT EXISTS works (
 CREATE TABLE IF NOT EXISTS telegram (
     telegram_id VARCHAR DEFAULT NULL,
     user_id UUID UNIQUE NOT NULL,
-    confirmation_key VARCHAR DEFAULT NULL,
+    activation_key VARCHAR DEFAULT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id)
 );

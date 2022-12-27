@@ -2,27 +2,28 @@ import pg from "pg";
 
 const { Client } = pg;
 
-let POSTGRES_CONFIG;
-
 const { CURRENT_ENV } = process.env;
 
-if (["production", "development"].includes(CURRENT_ENV)) {
-  POSTGRES_CONFIG = {
-    host: process.env.PGHOST,
-    port: process.env.PGPORT,
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
-    database: process.env.PGDATABASE,
-  };
-} else {
-  POSTGRES_CONFIG = {
-    host: "localhost",
-    port: 5432,
-    user: "postgres",
-    password: "postgres",
-    database: "ogmo",
-  };
-}
+// Change according to development docker information
+const DEVELOPMENT_POSTGRES_CONFIG = {
+  host: "localhost",
+  port: 5432,
+  user: "postgres",
+  password: "postgres",
+  database: "ogmo",
+};
+
+const isDeployed = !!["production", "development"].includes(CURRENT_ENV);
+
+const POSTGRES_CONFIG = isDeployed
+  ? {
+      host: process.env.PGHOST,
+      port: process.env.PGPORT,
+      user: process.env.PGUSER,
+      password: process.env.PGPASSWORD,
+      database: process.env.PGDATABASE,
+    }
+  : DEVELOPMENT_POSTGRES_CONFIG;
 
 const client = new Client(POSTGRES_CONFIG);
 

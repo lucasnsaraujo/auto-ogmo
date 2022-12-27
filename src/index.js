@@ -26,5 +26,9 @@ if (["production", "development"].includes(CURRENT_ENV)) {
 }
 
 app.listen(PORT, () => {
-  console.log(`> 💻 AutoOgmoAPI started @ port ${process.env.PORT}`);
+  console.log(
+    `> 💻 auto-ogmo-api started @ port ${PORT} in ${
+      CURRENT_ENV ?? "development"
+    }`
+  );
 });
