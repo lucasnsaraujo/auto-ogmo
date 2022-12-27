@@ -3,6 +3,7 @@ import express from "express";
 import ns from "node-schedule";
 import { getAllUsersWorkData } from "./functions/getAllUsersWorkData.js";
 import routes from "./routes.js";
+import { bot, bot as TelegramBot } from "./services/telegram.js";
 
 const app = express();
 
@@ -27,6 +28,16 @@ if (["production", "development"].includes(CURRENT_ENV)) {
 } else {
   PORT = 1234;
 }
+
+TelegramBot.onText(/\/registrar/, (msg) => {
+  const options = {
+    reply_to_message_id: msg.message_id,
+    reply_markup: JSON.stringify({
+      keyboard: ["Gostaria de registrar", "testando"],
+    }),
+  };
+  bot.sendMessage(msg.chat.id, "Teste", options);
+});
 
 app.listen(PORT, () => {
   console.log(
