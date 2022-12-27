@@ -10,8 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_login VARCHAR NOT NULL,
     user_password VARCHAR NOT NULL,
-    active BOOLEAN NOT NULL DEFAULT true,
-    last_update TIMESTAMP
+    active BOOLEAN NOT NULL DEFAULT true
 );
 
 CREATE TABLE IF NOT EXISTS works (
@@ -30,6 +29,7 @@ CREATE TABLE IF NOT EXISTS works (
     requisitante VARCHAR,
     status VARCHAR,
     user_id UUID UNIQUE NOT NULL,
+    last_update TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
 

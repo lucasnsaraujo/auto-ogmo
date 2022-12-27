@@ -18,7 +18,13 @@ class WorkController {
   async store(request, response) {
     const data = request.body;
     const isBodyValid = checkIfHasAllParameters(data);
-    if (isBodyValid) {
+    if (isBodyValid && data?.user_id) {
+      const workUserAlreadyExists = await WorksRepository.findById(
+        data?.user_id
+      );
+      if (workUserAlreadyExists) {
+        return response.status(400).json({ error: "User already exists" });
+      }
       const work = await WorksRepository.create(data);
       return response.status(201).json(work);
     } else {
@@ -51,8 +57,7 @@ function checkIfHasAllParameters(data) {
   const hasNullItems = Object.keys(data).filter(
     (item) => data?.[item] === null || typeof data?.[item] === "undefined"
   ).length;
-  const hasAllItems = Object.keys(data).length === WORK_MODEL.length;
-  if (hasAllItems && !hasNullItems) {
+  if (!hasNullItems) {
     return true;
   }
   return false;
@@ -70,7 +75,6 @@ const WORK_MODEL = [
   "cais",
   "requisitante",
   "status",
-  "user_id",
 ];
 
 export default new WorkController();

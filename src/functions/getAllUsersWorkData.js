@@ -13,20 +13,28 @@ export async function getAllUsersWorkData() {
         user_password: user?.user_password,
       });
       if (crawledData) {
-        const currentStatus = checkWorkDataStatus(crawledData?.data?.status);
-        if (currentStatus === "assigned") {
-          await WorksRepository.create({
-            ...crawledData.data,
+        const currentData = await WorksRepository.findById(user.id);
+        const statusHasChanged = checkIfDataHasChanged(
+          currentData,
+          crawledData
+        );
+        if (statusHasChanged) {
+          console.log(crawledData);
+          await WorksRepository.update({
+            ...crawledData,
             user_id: user.id,
           });
-          await UsersRepository.updateLastTimestamp(user.id);
           const { telegram_id } = await TelegramRepository.findByUserId(
             user.id
           );
-          await sendTelegramMessage(telegram_id);
-          console.log(`> New work created! => ${crawledData.name}`);
+          if (telegram_id) {
+            await sendTelegramMessage(telegram_id);
+            console.log(`> New work created! => ${crawledData.name}`);
+          } else {
+            console.log(`> Telegram ID not found for user: ${user.id}`);
+          }
         } else {
-          console.log(`> No updates for user: ${crawledData.name}`);
+          console.log(`> No updates for user: ${user.name}`);
         }
       }
     }
@@ -35,5 +43,12 @@ export async function getAllUsersWorkData() {
   }
 }
 
-const checkWorkDataStatus = (status) =>
-  status && status.toLowerCase().includes("embarcado") ? "assigned" : "waiting";
+const checkIfDataHasChanged = (currentData, crawledData) => {
+  if (
+    crawledData?.parede === currentData?.parede &&
+    crawledData?.status === currentData?.status
+  ) {
+    return false;
+  }
+  return true;
+};

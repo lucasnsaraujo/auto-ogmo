@@ -11,7 +11,7 @@ class WorksRepository {
     const [row] = await db.query({
       text: `
       SELECT * FROM works
-      WHERE id = $1
+      WHERE user_id = $1
     `,
       values: [id],
     });
@@ -61,22 +61,6 @@ class WorksRepository {
     return row;
   }
   async update(id, data) {
-    const {
-      parede,
-      requi,
-      operacao,
-      turno,
-      ter,
-      funcao,
-      forma,
-      navio,
-      ber,
-      cais,
-      requisitante,
-      status,
-      user_id,
-    } = data;
-
     const [row] = await db.query({
       text: `
       UPDATE works
@@ -92,26 +76,25 @@ class WorksRepository {
       ber = $9, 
       cais = $10, 
       requisitante = $11,
-      status = $12, 
-      user_id = $13
-      WHERE id = $14
+      status = $12,
+      last_update = CURRENT_TIMESTAMP
+      WHERE user_id = $13
       RETURNING *
     `,
       values: [
-        parede,
-        requi,
-        operacao,
-        turno,
-        ter,
-        funcao,
-        forma,
-        navio,
-        ber,
-        cais,
-        requisitante,
-        status,
-        user_id,
-        id,
+        data?.parede,
+        data?.requi,
+        data?.operacao,
+        data?.turno,
+        data?.ter,
+        data?.funcao,
+        data?.forma,
+        data?.navio,
+        data?.ber,
+        data?.cais,
+        data?.requisitante,
+        data?.status,
+        data?.id,
       ],
     });
     return row;

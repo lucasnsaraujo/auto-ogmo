@@ -64,9 +64,8 @@ export async function crawlWorkData({ user_login, user_password }) {
       };
     });
     await browser.close();
-    return { ...user, data };
+    return { ...data };
   } catch (error) {
-    console.log("error");
     return null;
   }
 }

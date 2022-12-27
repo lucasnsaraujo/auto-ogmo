@@ -2,22 +2,10 @@ import db from "../../database/index.js";
 class UsersRepository {
   async findUsersShouldUpdate() {
     const row = await db.query(`
-    SELECT * FROM users 
-    WHERE (active = true) 
-    AND (last_update <= (CURRENT_TIMESTAMP - interval '5 hours') OR last_update IS NULL);
+    SELECT users.*, works.last_update FROM users JOIN works ON users.id=works.user_id
+    WHERE (users.active = true) 
+    AND (works.last_update <= (CURRENT_TIMESTAMP - interval '5 hours') OR works.last_update IS NULL)
     `);
-    return row;
-  }
-  async updateLastTimestamp(id) {
-    const [row] = await db.query({
-      text: `
-    UPDATE users 
-    SET last_update = CURRENT_TIMESTAMP
-    WHERE id = $1
-    RETURNING *
-    `,
-      values: [id],
-    });
     return row;
   }
   async findByPhoneNumber(phone_number) {
@@ -36,13 +24,13 @@ class UsersRepository {
   }
   async findAll() {
     const row = await db.query(
-      `SELECT id, name, email, phone_number, created_at, last_update FROM users`
+      `SELECT id, name, email, phone_number, created_at FROM users`
     );
     return row;
   }
   async findById(id) {
     const [row] = await db.query({
-      text: `SELECT id, active, name, email, phone_number, created_at, last_update FROM users WHERE id = $1`,
+      text: `SELECT id, active, name, email, phone_number, created_at FROM users WHERE id = $1`,
       values: [id],
     });
     return row;

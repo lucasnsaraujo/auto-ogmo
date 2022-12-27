@@ -1,5 +1,6 @@
 import UsersRepository from "../repositories/UsersRepository.js";
 import TelegramRepository from "../repositories/TelegramRepository.js";
+import WorksRepository from "../repositories/WorksRepository.js";
 class UserController {
   async index(request, response) {
     const users = await UsersRepository.findAll();
@@ -48,6 +49,7 @@ class UserController {
       const { activation_key } = await TelegramRepository.generateActivationKey(
         user.id
       );
+      await WorksRepository.create({ user_id: user.id });
       return response.status(201).json({ ...user, activation_key });
     } else {
       return response.status(400).json({
