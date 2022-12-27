@@ -15,9 +15,9 @@ class TelegramRepository {
 
     // Confirms if this key has not been generated before to any other user
     let key = generateRandom();
-    let generatedKeysInDb = await this.findByActivationKey(key);
-    console.log({ key, generatedKeysInDb });
-    while (generatedKeysInDb && generatedKeysInDb?.["activation_key"] === key) {
+    let databaseItems = await this.findAll();
+    let keysAlreadyUsed = databaseItems.map((item) => item?.["activation_key"]);
+    while (generatedKeysInDb && keysAlreadyUsed.includes(key)) {
       key = generateRandom();
     }
 
@@ -78,7 +78,8 @@ class TelegramRepository {
     const [row] = db.query({
       text: `
       UPDATE telegram
-      SET telegram_id = $1
+      SET telegram_id = $1,
+      SET activation_key = NULL
       WHERE user_id = $2
       RETURNING *;
       `,
