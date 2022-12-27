@@ -13,6 +13,9 @@ app.use(routes);
 // ns.scheduleJob("*/10 * * * * *", async () => {
 // UPDATE EVERY 10 SECONDS - DEVELOPMENT ONLY!
 ns.scheduleJob("*/10 * * * *", async () => {
+  console.log("====================================");
+  console.log("|         Iniciando Job...         |");
+  console.log("====================================");
   await getAllUsersWorkData();
 });
 
