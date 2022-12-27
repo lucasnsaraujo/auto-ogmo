@@ -10,9 +10,9 @@ app.use(express.json());
 
 app.use(routes);
 
-// ns.scheduleJob("*/10 * * * *", async () => {
-ns.scheduleJob("*/10 * * * * *", async () => {
-  // UPDATE EVERY 10 SECONDS - DEVELOPMENT ONLY!
+// ns.scheduleJob("*/10 * * * * *", async () => {
+// UPDATE EVERY 10 SECONDS - DEVELOPMENT ONLY!
+ns.scheduleJob("*/10 * * * *", async () => {
   await getAllUsersWorkData();
 });
 
