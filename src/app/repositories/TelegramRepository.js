@@ -17,7 +17,7 @@ class TelegramRepository {
     let key = generateRandom();
     let databaseItems = await this.findAll();
     let keysAlreadyUsed = databaseItems.map((item) => item?.["activation_key"]);
-    while (generatedKeysInDb && keysAlreadyUsed.includes(key)) {
+    while (keysAlreadyUsed?.length && keysAlreadyUsed.includes(key)) {
       key = generateRandom();
     }
 
