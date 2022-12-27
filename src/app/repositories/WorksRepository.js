@@ -94,7 +94,7 @@ class WorksRepository {
         data?.cais,
         data?.requisitante,
         data?.status,
-        data?.id,
+        id,
       ],
     });
     return row;

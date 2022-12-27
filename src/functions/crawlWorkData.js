@@ -8,7 +8,10 @@ export async function crawlWorkData({ user_login, user_password }) {
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
   const page = await browser.newPage();
-  await page.goto(LOGIN_PAGE_URL, { waitUntil: "networkidle2" });
+  await page.goto(LOGIN_PAGE_URL, {
+    waitUntil: "networkidle2",
+    timeout: 300000,
+  });
 
   await page.type("#txtLogin", user_login);
   await page.type("#txtSenha", user_password);
