@@ -3,14 +3,14 @@ import db from "../../database/index.js";
 class WorksRepository {
   async findAll() {
     const row = await db.query(`
-    SELECT * FROM work_request
+    SELECT * FROM works
   `);
     return row;
   }
   async findById(id) {
     const [row] = await db.query({
       text: `
-      SELECT * FROM work_request
+      SELECT * FROM works
       WHERE id = $1
     `,
       values: [id],
@@ -31,13 +31,13 @@ class WorksRepository {
       cais,
       requisitante,
       status,
-      worker_id,
+      user_id,
     } = user;
     const [row] = await db.query({
       text: `
-      INSERT INTO work_request
+      INSERT INTO works
       (parede, requi, operacao, turno, ter, funcao, forma, navio, ber, cais, requisitante,
-        status, worker_id)
+        status, user_id)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
       RETURNING *
     `,
@@ -54,7 +54,7 @@ class WorksRepository {
         cais,
         requisitante,
         status,
-        worker_id,
+        user_id,
       ],
     });
 
@@ -74,12 +74,12 @@ class WorksRepository {
       cais,
       requisitante,
       status,
-      worker_id,
+      user_id,
     } = data;
 
     const [row] = await db.query({
       text: `
-      UPDATE work_request
+      UPDATE works
       SET
       parede = $1, 
       requi = $2, 
@@ -93,7 +93,7 @@ class WorksRepository {
       cais = $10, 
       requisitante = $11,
       status = $12, 
-      worker_id = $13
+      user_id = $13
       WHERE id = $14
       RETURNING *
     `,
@@ -110,7 +110,7 @@ class WorksRepository {
         cais,
         requisitante,
         status,
-        worker_id,
+        user_id,
         id,
       ],
     });
@@ -119,7 +119,7 @@ class WorksRepository {
   async delete(id) {
     const deleteOperation = db.query({
       text: `
-      DELETE FROM work_request
+      DELETE FROM works
       WHERE id = $1
     `,
       values: [id],

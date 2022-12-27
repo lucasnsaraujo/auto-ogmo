@@ -66,7 +66,7 @@ const USER_MODEL = [
   "cais",
   "requisitante",
   "status",
-  "worker_id",
+  "user_id",
 ];
 
 export default new WorkController();

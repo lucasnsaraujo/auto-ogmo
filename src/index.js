@@ -10,11 +10,12 @@ app.use(express.json());
 
 app.use(routes);
 
-// ns.scheduleJob("*/10 * * * * *", async () => { // UPDATE EVERY 10 SECONDS - DEVELOPMENT ONLY!
-ns.scheduleJob("*/10 * * * *", async () => {
+// ns.scheduleJob("*/10 * * * *", async () => {
+ns.scheduleJob("*/10 * * * * *", async () => {
+  // UPDATE EVERY 10 SECONDS - DEVELOPMENT ONLY!
   await getAllUsersWorkData();
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(1234, () => {
   console.log(`> 💻 AutoOgmoAPI started @ port ${process.env.PORT}`);
 });

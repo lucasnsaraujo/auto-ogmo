@@ -15,7 +15,7 @@ export async function getAllUsersWorkData() {
         if (currentStatus === "assigned") {
           await WorksRepository.create({
             ...crawledData.data,
-            worker_id: user.id,
+            user_id: user.id,
           });
           await UsersRepository.updateLastTimestamp(user.id);
           console.log(`> Novo work criado! => ${crawledData.name}`);
