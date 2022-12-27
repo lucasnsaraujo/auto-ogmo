@@ -16,8 +16,14 @@ ns.scheduleJob("*/10 * * * * *", async () => {
   await getAllUsersWorkData();
 });
 
-const PORT = process.env.PORT;
-// const PORT = 1234
+// Port based on current environment;
+let PORT;
+const { CURRENT_ENV } = process.env;
+if (["production", "development"].includes(CURRENT_ENV)) {
+  PORT = process.env.PORT;
+} else {
+  PORT = 1234;
+}
 
 app.listen(PORT, () => {
   console.log(`> 💻 AutoOgmoAPI started @ port ${process.env.PORT}`);
