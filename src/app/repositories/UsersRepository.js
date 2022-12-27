@@ -1,10 +1,14 @@
 import db from "../../database/index.js";
 class UsersRepository {
   async findUsersShouldUpdate() {
-    const row = await db.query(`
+    const usersWith6hourGap = await db.query(`
     SELECT users.*, works.last_update FROM users JOIN works ON users.id=works.user_id
     WHERE (users.active = true) 
     AND (works.last_update <= (CURRENT_TIMESTAMP - interval '5 hours') OR works.last_update IS NULL)
+    `);
+    const row = await db.query(`
+    SELECT users.*, works.last_update FROM users JOIN works ON users.id=works.user_id
+    WHERE (users.active = true)
     `);
     return row;
   }
