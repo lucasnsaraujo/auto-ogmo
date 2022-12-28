@@ -3,6 +3,7 @@ import express from "express";
 import ns from "node-schedule";
 import { getAllUsersWorkData } from "./functions/getAllUsersWorkData.js";
 import routes from "./routes.js";
+import bot from "./services/telegram.js";
 
 const app = express();
 
@@ -10,12 +11,14 @@ app.use(express.json());
 
 app.use(routes);
 
-// ns.scheduleJob("*/10 * * * * *", async () => {
+if (process?.env?.CURRENT_ENV !== "production") {
+  bot.launch();
+}
+
+// ns.scheduleJob("*/10 * * * *", async () => {
 // UPDATE EVERY 10 SECONDS - DEVELOPMENT ONLY!
-ns.scheduleJob("*/10 * * * *", async () => {
-  console.log("====================================");
-  console.log("|         Iniciando Job...         |");
-  console.log("====================================");
+ns.scheduleJob("*/10 * * * * *", async () => {
+  console.log("> Initializing Scheduled Job...");
   await getAllUsersWorkData();
 });
 
