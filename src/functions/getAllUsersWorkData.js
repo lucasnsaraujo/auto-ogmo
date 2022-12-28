@@ -27,7 +27,11 @@ export async function getAllUsersWorkData() {
         const isEmbarcado = checkIfUserIsEmbarcado(crawledData);
         if (telegram_id && isEmbarcado) {
           await sendTelegramMessage(telegram_id);
-          console.log(`> New work update! => ${user?.name}`);
+          console.log(`> User is being called! => ${user?.name}`);
+        } else if (isEmbarcado) {
+          console.log(
+            `> User called! Does not have Telegram configured [${user?.name}]`
+          );
         } else {
           console.log(`> Data has resetted for user: [${user?.name}]`);
         }
