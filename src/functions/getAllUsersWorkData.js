@@ -25,7 +25,8 @@ export async function getAllUsersWorkData() {
         const { telegram_id } = await TelegramRepository.findByUserId(user.id);
         const isEmbarcado = checkIfUserIsEmbarcado(crawledData);
         if (telegram_id && isEmbarcado) {
-          await sendTelegramMessage(telegram_id);
+          const message = generateTelegramMessage(user, crawledData);
+          await sendTelegramMessage(telegram_id, message);
           console.log(`> User is being called! => ${user?.name}`);
         } else if (isEmbarcado) {
           console.log(
@@ -37,6 +38,10 @@ export async function getAllUsersWorkData() {
       } else {
         console.log(`> No updates for user: ${user.name}`);
       }
+    } else {
+      console.log(
+        `Could not crawl data. Possibly there are wrong credentials. [${user.name}]`
+      );
     }
   }
 }
@@ -53,8 +58,17 @@ const checkIfDataHasChanged = (currentData, crawledData) => {
 
 function checkIfUserIsEmbarcado(crawledData) {
   const { status } = crawledData;
-  if (status.toLowerCase().includes("embarcado")) {
+  if (!status) {
+    return false;
+  }
+  if (status?.toString()?.toLowerCase()?.includes("embarcado")) {
     return true;
   }
   return false;
+}
+
+function generateTelegramMessage(user, crawledData) {
+  return `
+    🚨 Você foi alocado!\n- Nome: ${user?.name}\n- Parede: ${crawledData?.parede}\n- Requi: ${crawledData?.requi}\n- Operação: ${crawledData?.operacao}\n- Turno: ${crawledData?.turno}\n- Ter: ${crawledData?.ter}\n- Função: ${crawledData?.funcao}\n- Forma: ${crawledData?.forma}\n- Navio: ${crawledData?.navio}\n- Ber: ${crawledData?.ber}\n- Cais: ${crawledData?.cais}\n- Requisitante: ${crawledData?.requisitante}\n- Status: ${crawledData?.status}
+  `;
 }

@@ -5,17 +5,17 @@ import WorkController from "./app/controllers/WorkController.js";
 
 const router = Router();
 
-router.get("/users", UserController.index);
-router.get("/users/:id", UserController.show);
-router.post("/users", UserController.store);
-router.put("/users/:id", UserController.update);
-router.delete("/users/:id", UserController.delete);
+router.get("/api/users", UserController.index);
+router.get("/api/users/:id", UserController.show);
+router.post("/api/users", UserController.store);
+router.put("/api/users/:id", UserController.update);
+router.delete("/api/users/:id", UserController.delete);
 
-router.get("/works", WorkController.index);
-router.get("/works/:id", WorkController.show);
-router.post("/works", WorkController.store);
-router.put("/works/:id", WorkController.update);
-router.delete("/works/:id", WorkController.delete);
+router.get("/api/works", WorkController.index);
+router.get("/api/works/:id", WorkController.show);
+router.post("/api/works", WorkController.store);
+router.put("/api/works/:id", WorkController.update);
+router.delete("/api/works/:id", WorkController.delete);
 
 router.post("/activate", TelegramController.activate);
 

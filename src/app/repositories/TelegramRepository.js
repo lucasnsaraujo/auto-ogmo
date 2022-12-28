@@ -2,6 +2,16 @@ import db from "../../database/index.js";
 import UsersRepository from "./UsersRepository.js";
 
 class TelegramRepository {
+  async findByTelegramId(telegram_id) {
+    const [row] = await db.query({
+      text: `
+    SELECT * FROM telegram WHERE telegram_id = $1;
+    `,
+      values: [telegram_id],
+    });
+    return row ?? null;
+  }
+
   async _generateUniqueKey(length = 6) {
     // Generated random key (default: 6 characters)
     function generateRandom() {
