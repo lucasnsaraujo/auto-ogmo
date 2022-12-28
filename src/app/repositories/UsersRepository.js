@@ -1,12 +1,22 @@
 import db from "../../database/index.js";
 class UsersRepository {
-  async setUserActive(id, isActive = true) {
+  async setUserActive(id) {
     await db.query({
       text: `UPDATE users
-      SET active = $1
+      SET active = true
       WHERE id = $2
       `,
-      values: [isActive, id],
+      values: [id],
+    });
+    return;
+  }
+  async setUserDeactive(id) {
+    await db.query({
+      text: `UPDATE users
+      SET active = false
+      WHERE id = $2
+      `,
+      values: [id],
     });
     return;
   }
