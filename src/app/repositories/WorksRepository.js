@@ -3,15 +3,15 @@ import db from "../../database/index.js";
 class WorksRepository {
   async findAll() {
     const row = await db.query(`
-    SELECT * FROM work_request
+    SELECT * FROM works
   `);
     return row;
   }
   async findById(id) {
     const [row] = await db.query({
       text: `
-      SELECT * FROM work_request
-      WHERE id = $1
+      SELECT * FROM works
+      WHERE user_id = $1
     `,
       values: [id],
     });
@@ -31,13 +31,13 @@ class WorksRepository {
       cais,
       requisitante,
       status,
-      worker_id,
+      user_id,
     } = user;
     const [row] = await db.query({
       text: `
-      INSERT INTO work_request
+      INSERT INTO works
       (parede, requi, operacao, turno, ter, funcao, forma, navio, ber, cais, requisitante,
-        status, worker_id)
+        status, user_id)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
       RETURNING *
     `,
@@ -54,32 +54,16 @@ class WorksRepository {
         cais,
         requisitante,
         status,
-        worker_id,
+        user_id,
       ],
     });
 
     return row;
   }
   async update(id, data) {
-    const {
-      parede,
-      requi,
-      operacao,
-      turno,
-      ter,
-      funcao,
-      forma,
-      navio,
-      ber,
-      cais,
-      requisitante,
-      status,
-      worker_id,
-    } = data;
-
     const [row] = await db.query({
       text: `
-      UPDATE work_request
+      UPDATE works
       SET
       parede = $1, 
       requi = $2, 
@@ -92,25 +76,24 @@ class WorksRepository {
       ber = $9, 
       cais = $10, 
       requisitante = $11,
-      status = $12, 
-      worker_id = $13
-      WHERE id = $14
+      status = $12,
+      last_update = CURRENT_TIMESTAMP
+      WHERE user_id = $13
       RETURNING *
     `,
       values: [
-        parede,
-        requi,
-        operacao,
-        turno,
-        ter,
-        funcao,
-        forma,
-        navio,
-        ber,
-        cais,
-        requisitante,
-        status,
-        worker_id,
+        data?.parede,
+        data?.requi,
+        data?.operacao,
+        data?.turno,
+        data?.ter,
+        data?.funcao,
+        data?.forma,
+        data?.navio,
+        data?.ber,
+        data?.cais,
+        data?.requisitante,
+        data?.status,
         id,
       ],
     });
@@ -119,7 +102,7 @@ class WorksRepository {
   async delete(id) {
     const deleteOperation = db.query({
       text: `
-      DELETE FROM work_request
+      DELETE FROM works
       WHERE id = $1
     `,
       values: [id],

@@ -10,13 +10,12 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_login VARCHAR NOT NULL,
     user_password VARCHAR NOT NULL,
-    should_update BOOLEAN NOT NULL DEFAULT true,
-    last_update TIMESTAMP
+    active BOOLEAN NOT NULL DEFAULT false
 );
 
-CREATE TABLE IF NOT EXISTS work_request (
+CREATE TABLE IF NOT EXISTS works (
     id UUID NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
-    crawled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     parede VARCHAR,
     requi VARCHAR,
     operacao VARCHAR,
@@ -29,6 +28,14 @@ CREATE TABLE IF NOT EXISTS work_request (
     cais VARCHAR,
     requisitante VARCHAR,
     status VARCHAR,
-    worker_id UUID NOT NULL,
-    FOREIGN KEY(worker_id) REFERENCES users(id)
+    user_id UUID UNIQUE NOT NULL,
+    last_update TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS telegram (
+    telegram_id VARCHAR DEFAULT NULL,
+    user_id UUID UNIQUE NOT NULL,
+    activation_key VARCHAR DEFAULT NULL,
+    FOREIGN KEY(user_id) REFERENCES users(id)
 );

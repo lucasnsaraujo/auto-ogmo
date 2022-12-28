@@ -1,4 +1,5 @@
 import { Router } from "express";
+import TelegramController from "./app/controllers/TelegramController.js";
 import UserController from "./app/controllers/UserController.js";
 import WorkController from "./app/controllers/WorkController.js";
 
@@ -15,5 +16,7 @@ router.get("/works/:id", WorkController.show);
 router.post("/works", WorkController.store);
 router.put("/works/:id", WorkController.update);
 router.delete("/works/:id", WorkController.delete);
+
+router.post("/activate", TelegramController.activate);
 
 export default router;

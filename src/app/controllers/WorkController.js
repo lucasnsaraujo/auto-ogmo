@@ -18,11 +18,19 @@ class WorkController {
   async store(request, response) {
     const data = request.body;
     const isBodyValid = checkIfHasAllParameters(data);
-    if (isBodyValid) {
+    if (isBodyValid && data?.user_id) {
+      const workUserAlreadyExists = await WorksRepository.findById(
+        data?.user_id
+      );
+      if (workUserAlreadyExists) {
+        return response.status(400).json({ error: "User already exists" });
+      }
       const work = await WorksRepository.create(data);
       return response.status(201).json(work);
     } else {
-      return response.status(400).json({ error: "Invalid payload" });
+      return response
+        .status(400)
+        .json({ error: "Some attributes are missing", required: WORK_MODEL });
     }
   }
   async update(request, response) {
@@ -33,7 +41,9 @@ class WorkController {
       const work = await WorksRepository.update(id, data);
       return response.status(200).json(work);
     } else {
-      return response.status(400).json({ error: "Invalid payload" });
+      return response
+        .status(400)
+        .json({ error: "Some attributes are missing", required: WORK_MODEL });
     }
   }
   async delete(request, response) {
@@ -47,13 +57,12 @@ function checkIfHasAllParameters(data) {
   const hasNullItems = Object.keys(data).filter(
     (item) => data?.[item] === null || typeof data?.[item] === "undefined"
   ).length;
-  const hasAllItems = Object.keys(data).length === USER_MODEL.length;
-  if (hasAllItems && !hasNullItems) {
+  if (!hasNullItems) {
     return true;
   }
   return false;
 }
-const USER_MODEL = [
+const WORK_MODEL = [
   "parede",
   "requi",
   "operacao",
@@ -66,7 +75,6 @@ const USER_MODEL = [
   "cais",
   "requisitante",
   "status",
-  "worker_id",
 ];
 
 export default new WorkController();

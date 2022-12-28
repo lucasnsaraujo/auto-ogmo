@@ -10,11 +10,28 @@ app.use(express.json());
 
 app.use(routes);
 
-// ns.scheduleJob("*/10 * * * * *", async () => { // UPDATE EVERY 10 SECONDS - DEVELOPMENT ONLY!
+// ns.scheduleJob("*/10 * * * * *", async () => {
+// UPDATE EVERY 10 SECONDS - DEVELOPMENT ONLY!
 ns.scheduleJob("*/10 * * * *", async () => {
+  console.log("====================================");
+  console.log("|         Iniciando Job...         |");
+  console.log("====================================");
   await getAllUsersWorkData();
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`> 💻 AutoOgmoAPI started @ port ${process.env.PORT}`);
+// Port based on current environment;
+let PORT;
+const { CURRENT_ENV } = process.env;
+if (["production", "development"].includes(CURRENT_ENV)) {
+  PORT = process.env.PORT;
+} else {
+  PORT = 1234;
+}
+
+app.listen(PORT, () => {
+  console.log(
+    `> 💻 auto-ogmo-api started @ port ${PORT} in ${
+      CURRENT_ENV ?? "development"
+    }`
+  );
 });
