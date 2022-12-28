@@ -32,8 +32,6 @@ export async function getAllUsersWorkData() {
           console.log(
             `> User called! Does not have Telegram configured [${user?.name}]`
           );
-        } else {
-          console.log(`> Data has resetted for user: [${user?.name}]`);
         }
       } else {
         console.log(`> No updates for user: ${user.name}`);

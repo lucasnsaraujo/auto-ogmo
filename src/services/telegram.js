@@ -2,6 +2,7 @@ import { Telegraf } from "telegraf";
 import TelegramController from "../app/controllers/TelegramController.js";
 import TelegramRepository from "../app/repositories/TelegramRepository.js";
 import UsersRepository from "../app/repositories/UsersRepository.js";
+import { crawlWorkData } from "../functions/crawlWorkData.js";
 
 const isDeployed = !!["production", "development"].includes(
   process.env.CURRENT_ENV
@@ -49,6 +50,20 @@ bot.command("registrar", async (ctx) => {
         }`
       );
     }
+  }
+});
+
+bot.command("status", async (ctx) => {
+  const user = await checkIfUserIsActivated(ctx.message.from.id);
+  if (!user) {
+    ctx.reply("Ative sua conta para receber suas atualizações!");
+    return;
+  }
+  const credentials = await UsersRepository.findUserCredentialsById(user.id);
+  if (credentials.user_login && credentials.user_password) {
+    const { user_login, user_password } = credentials;
+    const data = await crawlWorkData({ user_login, user_password });
+    ctx.reply(JSON.stringify(data));
   }
 });
 
