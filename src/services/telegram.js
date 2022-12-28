@@ -58,18 +58,24 @@ bot.command("status", async (ctx) => {
   if (!user) {
     ctx.reply("Ative sua conta para receber suas atualizações!");
   } else {
-    const credentials = await UsersRepository.findUserCredentialsById(user.id);
-    if (credentials.user_login && credentials.user_password) {
-      const { user_login, user_password } = credentials;
-      const data = await crawlWorkData({ user_login, user_password });
-      if (!data) {
-        ctx.reply(
-          "Não foi possível buscar os dados. Por favor, tente novamente mais tarde."
-        );
-        return;
+    try {
+      const credentials = await UsersRepository.findUserCredentialsById(
+        user.id
+      );
+      if (credentials.user_login && credentials.user_password) {
+        const { user_login, user_password } = credentials;
+        const data = await crawlWorkData({ user_login, user_password });
+        if (!data) {
+          ctx.reply(
+            "Não foi possível buscar os dados. Por favor, tente novamente mais tarde."
+          );
+          return;
+        }
+        const message = generateTelegramMessage(user, data);
+        ctx.reply(message);
       }
-      const message = generateTelegramMessage(user, data);
-      ctx.reply(message);
+    } catch (err) {
+      ctx.reply(`Ocorreu um erro. Tente novamente mais tarde`);
     }
   }
 });

@@ -25,6 +25,7 @@ export async function getAllUsersWorkData() {
         const { telegram_id } = await TelegramRepository.findByUserId(user.id);
         const isEmbarcado = checkIfUserIsEmbarcado(crawledData);
         if (telegram_id && isEmbarcado) {
+          console.log({ telegram_id, isEmbarcado, crawledData, currentData });
           const message = generateTelegramMessage(user, crawledData);
           await sendTelegramMessage(telegram_id, message);
           console.log(`> User is being called! => ${user?.name}`);
