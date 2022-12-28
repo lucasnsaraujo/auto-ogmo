@@ -18,6 +18,7 @@ export async function getAllUsersWorkData() {
     if (crawledData) {
       const currentData = await WorksRepository.findById(user.id);
       const statusHasChanged = checkIfDataHasChanged(currentData, crawledData);
+      console.log({ crawledData, currentData });
       if (statusHasChanged) {
         await WorksRepository.update(user.id, {
           ...crawledData,
@@ -25,7 +26,7 @@ export async function getAllUsersWorkData() {
         const { telegram_id } = await TelegramRepository.findByUserId(user.id);
         const isEmbarcado = checkIfUserIsEmbarcado(crawledData);
         if (telegram_id && isEmbarcado) {
-          console.log({ telegram_id, isEmbarcado, crawledData, currentData });
+          console.log({ telegram_id, isEmbarcado });
           const message = generateTelegramMessage(user, crawledData);
           await sendTelegramMessage(telegram_id, message);
           console.log(`> User is being called! => ${user?.name}`);
