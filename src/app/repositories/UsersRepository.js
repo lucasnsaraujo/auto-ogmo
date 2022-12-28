@@ -1,5 +1,12 @@
 import db from "../../database/index.js";
 class UsersRepository {
+  async findUserCredentialsById(id) {
+    const [row] = await db.query({
+      text: `SELECT id, name, user_login, user_password FROM users WHERE id = $1`,
+      values: [id],
+    });
+    return row;
+  }
   async setUserActive(id) {
     await db.query({
       text: `UPDATE users
