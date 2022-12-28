@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use(routes);
 
-if (process?.env?.CURRENT_ENV !== "production") {
+if (process?.env?.CURRENT_ENV === "production") {
   bot.launch();
 }
 
