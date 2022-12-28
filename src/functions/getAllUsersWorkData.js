@@ -18,8 +18,8 @@ export async function getAllUsersWorkData() {
     if (crawledData) {
       const currentData = await WorksRepository.findById(user.id);
       const statusHasChanged = checkIfDataHasChanged(currentData, crawledData);
-      console.log({ crawledData, currentData });
       if (statusHasChanged) {
+        console.log("> Status has changed.");
         await WorksRepository.update(user.id, {
           ...crawledData,
         });
@@ -49,7 +49,6 @@ export async function getAllUsersWorkData() {
 const checkIfDataHasChanged = (currentData, crawledData) => {
   if (
     crawledData?.parede !== currentData?.parede &&
-    crawledData?.status !== currentData?.status &&
     !!crawledData?.parede &&
     !!crawledData.status
   ) {
