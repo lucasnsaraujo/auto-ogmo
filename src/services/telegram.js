@@ -67,7 +67,6 @@ bot.command("status", async (ctx) => {
         );
         return;
       }
-      console.log(data);
       const message = generateTelegramMessage(user, data);
       ctx.reply(message);
     } catch (err) {
@@ -90,25 +89,23 @@ async function checkIfUserIsActivated(id) {
   return { ...user_information, telegram: telegramInfo };
 }
 
-function generateTelegramMessage(user, crawledData) {
-  return `
-    🚢 Status Atual!\n${user?.name && "- Nome:"} ${user?.name + "\n"}${
-    user?.name && "- Parede:"
-  } ${crawledData?.parede + "\n"}${user?.name && "- Requi:"} ${
-    crawledData?.requi + "\n"
-  }${user?.name && "- Operação:"} ${crawledData?.operacao + "\n"}${
-    user?.name && "- Turno:"
-  } ${crawledData?.turno + "\n"}${user?.name && "- Ter:"} ${
-    crawledData?.ter + "\n"
-  }${user?.name && "- Função:"} ${crawledData?.funcao + "\n"}${
-    user?.name && "- Forma:"
-  } ${crawledData?.forma + "\n"}${user?.name && "- Navio:"} ${
-    crawledData?.navio + "\n"
-  }${user?.name && "- Ber:"} ${crawledData?.ber + "\n"}${
-    user?.name && "- Cais:"
-  } ${crawledData?.cais + "\n"}${user?.name && "- Requisitante:"} ${
-    crawledData?.requisitante + "\n"
-  }${user?.name && "- Status:"} ${crawledData?.status}
+function generateTelegramMessage(user, crawledData, type = "status") {
+  return `${
+    type === "status" ? `🚢 Status Atual!\n` : `🚨 Você foi alocado!\n`
+  }${!!user.name && `- Nome: ${user.name}\n`}${
+    !!crawledData.parede.toString() && `- Parede: ${crawledData.parede}\n`
+  }${!!crawledData.requi.toString() && `- Requi: ${crawledData.requi}\n`}${
+    !!crawledData.operacao.toString() && `- Operação: ${crawledData.operacao}\n`
+  }${!!crawledData.turno.toString() && `- Turno: ${crawledData.turno}\n`}${
+    !!crawledData.ter.toString() && `- Ter: ${crawledData.ter}\n`
+  }${!!crawledData.funcao.toString() && `- Função: ${crawledData.funcao}\n`}${
+    !!crawledData.forma.toString() && `- Forma: ${crawledData.forma}\n`
+  }${!!crawledData.navio.toString() && `- Navio: ${crawledData.navio}\n`}${
+    !!crawledData.ber.toString() && `- Ber: ${crawledData.ber}\n`
+  }${!!crawledData.cais.toString() && `- Cais: ${crawledData.cais}\n`}${
+    !!crawledData.requisitante.toString() &&
+    `- Requisitante: ${crawledData.requisitante}\n`
+  }${!!crawledData.status.toString() && `- Status: ${crawledData.status}\n`}
   `;
 }
 
