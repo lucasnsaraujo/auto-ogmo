@@ -48,12 +48,14 @@ export async function getAllUsersWorkData() {
 
 const checkIfDataHasChanged = (currentData, crawledData) => {
   if (
-    crawledData?.parede === currentData?.parede &&
-    crawledData?.status === currentData?.status
+    crawledData?.parede !== currentData?.parede &&
+    crawledData?.status !== currentData?.status &&
+    !!crawledData?.parede &&
+    !!crawledData.status
   ) {
-    return false;
+    return true;
   }
-  return true;
+  return false;
 };
 
 function checkIfUserIsEmbarcado(crawledData) {

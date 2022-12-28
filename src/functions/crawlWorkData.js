@@ -12,6 +12,7 @@ export async function crawlWorkData({ user_login, user_password }) {
     waitUntil: "networkidle2",
     timeout: 300000,
   });
+  console.log("> Logged in succesfully");
 
   await page.type("#txtLogin", user_login);
   await page.type("#txtSenha", user_password);
@@ -19,7 +20,7 @@ export async function crawlWorkData({ user_login, user_password }) {
   // As the documentation recommends, wait for page to load after clicking on login button
   await Promise.all([
     page.click("#ImgBtnLogin"),
-    page.waitForNavigation({ waitUntil: "domcontentloaded", timeout: 300000 }),
+    page.waitForNavigation({ waitUntil: "networkidle2", timeout: 300000 }),
   ]);
 
   // Searching for the user information on the page header

@@ -2,6 +2,7 @@ import { Telegraf } from "telegraf";
 import TelegramController from "../app/controllers/TelegramController.js";
 import TelegramRepository from "../app/repositories/TelegramRepository.js";
 import UsersRepository from "../app/repositories/UsersRepository.js";
+import WorksRepository from "../app/repositories/WorksRepository.js";
 import { crawlWorkData } from "../functions/crawlWorkData.js";
 
 const isDeployed = !!["production", "development"].includes(
@@ -59,21 +60,16 @@ bot.command("status", async (ctx) => {
     ctx.reply("Ative sua conta para receber suas atualizações!");
   } else {
     try {
-      const credentials = await UsersRepository.findUserCredentialsById(
-        user.id
-      );
-      if (credentials.user_login && credentials.user_password) {
-        const { user_login, user_password } = credentials;
-        const data = await crawlWorkData({ user_login, user_password });
-        if (!data) {
-          ctx.reply(
-            "Não foi possível buscar os dados. Por favor, tente novamente mais tarde."
-          );
-          return;
-        }
-        const message = generateTelegramMessage(user, data);
-        ctx.reply(message);
+      const data = await WorksRepository.findById(user.id);
+      if (!data) {
+        ctx.reply(
+          "Não foi possível buscar os dados. Por favor, tente novamente mais tarde."
+        );
+        return;
       }
+      console.log(data);
+      const message = generateTelegramMessage(user, data);
+      ctx.reply(message);
     } catch (err) {
       ctx.reply(`Ocorreu um erro. Tente novamente mais tarde`);
     }
