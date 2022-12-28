@@ -17,19 +17,19 @@ export async function getAllUsersWorkData() {
     });
     if (crawledData) {
       const currentData = await WorksRepository.findById(user.id);
+      console.log({ currentData, crawledData });
       const statusHasChanged = checkIfDataHasChanged(currentData, crawledData);
       if (statusHasChanged) {
         await WorksRepository.update(user.id, {
           ...crawledData,
         });
         const { telegram_id } = await TelegramRepository.findByUserId(user.id);
-        if (telegram_id) {
+        const isEmbarcado = checkIfUserIsEmbarcado(crawledData);
+        if (telegram_id && isEmbarcado) {
           await sendTelegramMessage(telegram_id);
-          console.log(`> New work created! => ${user?.name}`);
+          console.log(`> New work update! => ${user?.name}`);
         } else {
-          console.log(
-            `> Work created! But Telegram ID was not found for user: [${user?.name}]`
-          );
+          console.log(`> Data has resetted for user: [${user?.name}]`);
         }
       } else {
         console.log(`> No updates for user: ${user.name}`);
@@ -47,3 +47,11 @@ const checkIfDataHasChanged = (currentData, crawledData) => {
   }
   return true;
 };
+
+function checkIfUserIsEmbarcado(crawledData) {
+  const { status } = crawledData;
+  if (status.toLowerCase().includes("embarcado")) {
+    return true;
+  }
+  return false;
+}
