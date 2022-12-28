@@ -1,4 +1,5 @@
 import db from "../../database/index.js";
+import UsersRepository from "./UsersRepository.js";
 
 class TelegramRepository {
   async _generateUniqueKey(length = 6) {
@@ -85,6 +86,7 @@ class TelegramRepository {
       `,
       values: [telegramId, id],
     });
+    await UsersRepository.setUserActive(id);
     return row;
   }
 }

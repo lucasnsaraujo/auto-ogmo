@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_login VARCHAR NOT NULL,
     user_password VARCHAR NOT NULL,
-    active BOOLEAN NOT NULL DEFAULT true
+    active BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS works (

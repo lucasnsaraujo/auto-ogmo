@@ -1,5 +1,15 @@
 import db from "../../database/index.js";
 class UsersRepository {
+  async setUserActive(id, isActive = true) {
+    await db.query({
+      text: `UPDATE users
+      SET active = $1
+      WHERE id = $2
+      `,
+      values: [isActive, id],
+    });
+    return;
+  }
   async findUsersShouldUpdate() {
     const usersWith6hourGap = await db.query(`
     SELECT users.*, works.last_update FROM users JOIN works ON users.id=works.user_id
