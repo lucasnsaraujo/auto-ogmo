@@ -57,13 +57,14 @@ bot.command("status", async (ctx) => {
   const user = await checkIfUserIsActivated(ctx.message.from.id);
   if (!user) {
     ctx.reply("Ative sua conta para receber suas atualizações!");
-    return;
-  }
-  const credentials = await UsersRepository.findUserCredentialsById(user.id);
-  if (credentials.user_login && credentials.user_password) {
-    const { user_login, user_password } = credentials;
-    const data = await crawlWorkData({ user_login, user_password });
-    ctx.reply(JSON.stringify(data));
+  } else {
+    const credentials = await UsersRepository.findUserCredentialsById(user.id);
+    if (credentials.user_login && credentials.user_password) {
+      const { user_login, user_password } = credentials;
+      const data = await crawlWorkData({ user_login, user_password });
+      const message = generateTelegramMessage(user);
+      ctx.reply(JSON.stringify(data));
+    }
   }
 });
 
@@ -79,6 +80,28 @@ async function checkIfUserIsActivated(id) {
   }
   const user_information = await UsersRepository.findById(telegramInfo.user_id);
   return { ...user_information, telegram: telegramInfo };
+}
+
+function generateTelegramMessage(user, crawledData) {
+  return `
+    🚢 Status Atual!\n${user?.name && "- Nome:"} ${user?.name + "\n"}${
+    user?.name && "- Parede:"
+  } ${crawledData?.parede + "\n"}${user?.name && "- Requi:"} ${
+    crawledData?.requi + "\n"
+  }${user?.name && "- Operação:"} ${crawledData?.operacao + "\n"}${
+    user?.name && "- Turno:"
+  } ${crawledData?.turno + "\n"}${user?.name && "- Ter:"} ${
+    crawledData?.ter + "\n"
+  }${user?.name && "- Função:"} ${crawledData?.funcao + "\n"}${
+    user?.name && "- Forma:"
+  } ${crawledData?.forma + "\n"}${user?.name && "- Navio:"} ${
+    crawledData?.navio + "\n"
+  }${user?.name && "- Ber:"} ${crawledData?.ber + "\n"}${
+    user?.name && "- Cais:"
+  } ${crawledData?.cais + "\n"}${user?.name && "- Requisitante:"} ${
+    crawledData?.requisitante + "\n"
+  }${user?.name && "- Status:"} ${crawledData?.status}
+  `;
 }
 
 // process.once("SIGINT", () => bot.stop("SIGINT"));

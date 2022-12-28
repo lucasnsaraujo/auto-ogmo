@@ -19,7 +19,7 @@ export async function crawlWorkData({ user_login, user_password }) {
   // As the documentation recommends, wait for page to load after clicking on login button
   await Promise.all([
     page.click("#ImgBtnLogin"),
-    page.waitForNavigation({ waitUntil: "domcontentloaded" }),
+    page.waitForNavigation({ waitUntil: "domcontentloaded", timeout: 300000 }),
   ]);
 
   // Searching for the user information on the page header
