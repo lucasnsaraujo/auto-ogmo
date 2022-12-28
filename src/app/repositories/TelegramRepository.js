@@ -75,19 +75,18 @@ class TelegramRepository {
     return row;
   }
 
-  async registerTelegramIdToUser({ telegramId, id }) {
-    const [row] = db.query({
+  async registerTelegramIdToUser(id, telegramId) {
+    await db.query({
       text: `
       UPDATE telegram
-      SET telegram_id = $1,
-      SET activation_key = NULL
+      SET telegram_id = $1, activation_key = NULL
       WHERE user_id = $2
       RETURNING *;
       `,
       values: [telegramId, id],
     });
     await UsersRepository.setUserActive(id);
-    return row;
+    return true;
   }
 }
 

@@ -4,7 +4,7 @@ class UsersRepository {
     await db.query({
       text: `UPDATE users
       SET active = true
-      WHERE id = $2
+      WHERE id = $1
       `,
       values: [id],
     });
@@ -14,7 +14,7 @@ class UsersRepository {
     await db.query({
       text: `UPDATE users
       SET active = false
-      WHERE id = $2
+      WHERE id = $1
       `,
       values: [id],
     });
@@ -48,7 +48,7 @@ class UsersRepository {
   }
   async findAll() {
     const row = await db.query(
-      `SELECT id, name, email, phone_number, created_at FROM users`
+      `SELECT id, active, name, email, phone_number, created_at FROM users`
     );
     return row;
   }
