@@ -62,8 +62,14 @@ bot.command("status", async (ctx) => {
     if (credentials.user_login && credentials.user_password) {
       const { user_login, user_password } = credentials;
       const data = await crawlWorkData({ user_login, user_password });
-      const message = generateTelegramMessage(user);
-      ctx.reply(JSON.stringify(data));
+      if (!data) {
+        ctx.reply(
+          "Não foi possível buscar os dados. Por favor, tente novamente mais tarde."
+        );
+        return;
+      }
+      const message = generateTelegramMessage(user, data);
+      ctx.reply(message);
     }
   }
 });
