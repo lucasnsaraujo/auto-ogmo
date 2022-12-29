@@ -15,9 +15,9 @@ if (process?.env?.CURRENT_ENV === "production") {
   bot.launch();
 }
 
-// ns.scheduleJob("*/30 * * * * *", async () => {
+// ns.scheduleJob("*/10 * * * *", async () => {
 // UPDATE EVERY 10 SECONDS - DEVELOPMENT ONLY!
-ns.scheduleJob("*/10 * * * *", async () => {
+ns.scheduleJob("*/50 * * * * *", async () => {
   console.log("> Initializing Scheduled Job...");
   await getAllUsersWorkData();
 });
