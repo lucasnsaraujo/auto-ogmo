@@ -40,8 +40,15 @@ class TelegramController {
     if (!validActivationKey) return { error: "Chave de ativação inválida" };
 
     const user = await UsersRepository.findById(validActivationKey?.user_id);
-
-    if (validActivationKey?.activation_key === key && user?.email === email) {
+    const keyToCompare = validActivationKey?.activation_key
+      ?.toString()
+      ?.toLowerCase()
+      ?.trim();
+    const keyToActivate = key?.toString()?.toLowerCase()?.trim();
+    if (
+      keyToActivate === keyToCompare &&
+      user?.email.toString()?.trim() === email?.toString()?.trim()
+    ) {
       await TelegramRepository.registerTelegramIdToUser(user?.id, telegram_id);
       return { success: true, data: user };
     }

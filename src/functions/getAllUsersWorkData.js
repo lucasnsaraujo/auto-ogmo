@@ -26,10 +26,10 @@ export async function getAllUsersWorkData() {
         });
         const { telegram_id } = await TelegramRepository.findByUserId(user.id);
         const isEmbarcado = checkIfUserIsEmbarcado(crawledData);
-        if (telegram_id && isEmbarcado) {
+        if (telegram_id && !!isEmbarcado) {
           console.log({ telegram_id, isEmbarcado });
           const message = generateTelegramMessage(user, crawledData);
-          await sendTelegramMessage(telegram_id, message);
+          await sendTelegramMessage(telegram_id, message, isEmbarcado);
           console.log(`> User is being called! => ${user?.name}`);
         } else if (isEmbarcado) {
           console.log(
@@ -63,14 +63,19 @@ function checkIfUserIsEmbarcado(crawledData) {
   if (!status) {
     return false;
   }
+  if (status?.toString()?.toLowerCase().trim() === "não embarcado") {
+    return "not-embarked";
+  }
   if (status?.toString()?.toLowerCase()?.includes("embarcado")) {
-    return true;
+    return "embarked";
   }
   return false;
 }
 
-function generateTelegramMessage(user, crawledData) {
-  return `
-    🚨 Você foi alocado!\n- Nome: ${user?.name}\n- Parede: ${crawledData?.parede}\n- Requi: ${crawledData?.requi}\n- Operação: ${crawledData?.operacao}\n- Turno: ${crawledData?.turno}\n- Ter: ${crawledData?.ter}\n- Função: ${crawledData?.funcao}\n- Forma: ${crawledData?.forma}\n- Navio: ${crawledData?.navio}\n- Ber: ${crawledData?.ber}\n- Cais: ${crawledData?.cais}\n- Requisitante: ${crawledData?.requisitante}\n- Status: ${crawledData?.status}
-  `;
+function generateTelegramMessage(user, crawledData, isEmbarcado) {
+  return isEmbarcado === "embarked"
+    ? `
+    🚨 Você está embarcado!\n- Nome: ${user?.name}\n- Parede: ${crawledData?.parede}\n- Requisição: ${crawledData?.requi}\n- Operação: ${crawledData?.operacao}\n- Turno: ${crawledData?.turno}\n- Terno: ${crawledData?.ter}\n- Função: ${crawledData?.funcao}\n- Forma: ${crawledData?.forma}\n- Navio: ${crawledData?.navio}\n- Berço: ${crawledData?.ber}\n- Cais: ${crawledData?.cais}\n- Requisitante: ${crawledData?.requisitante}\n- Status: ${crawledData?.status}
+  `
+    : `🚨 Você foi não embarcado!`;
 }

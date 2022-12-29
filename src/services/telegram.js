@@ -97,17 +97,19 @@ function generateTelegramMessage(user, crawledData, type = "status") {
     type === "status" ? `🚢 Status Atual!\n` : `🚨 Você foi alocado!\n`
   }${!!user.name ? `- Nome: ${user.name}\n` : ""}${
     !!crawledData.parede.toString() ? `- Parede: ${crawledData.parede}\n` : ""
-  }${!!crawledData.requi.toString() ? `- Requi: ${crawledData.requi}\n` : ""}${
+  }${
+    !!crawledData.requi.toString() ? `- Requisição: ${crawledData.requi}\n` : ""
+  }${
     !!crawledData.operacao.toString()
       ? `- Operação: ${crawledData.operacao}\n`
       : ""
   }${!!crawledData.turno.toString() ? `- Turno: ${crawledData.turno}\n` : ""}${
-    !!crawledData.ter.toString() ? `- Ter: ${crawledData.ter}\n` : ""
+    !!crawledData.ter.toString() ? `- Terno: ${crawledData.ter}\n` : ""
   }${
     !!crawledData.funcao.toString() ? `- Função: ${crawledData.funcao}\n` : ""
   }${!!crawledData.forma.toString() ? `- Forma: ${crawledData.forma}\n` : ""}${
     !!crawledData.navio.toString() ? `- Navio: ${crawledData.navio}\n` : ""
-  }${!!crawledData.ber.toString() ? `- Ber: ${crawledData.ber}\n` : ""}${
+  }${!!crawledData.ber.toString() ? `- Berço: ${crawledData.ber}\n` : ""}${
     !!crawledData.cais.toString() ? `- Cais: ${crawledData.cais}\n` : ""
   }${
     !!crawledData.requisitante.toString()
