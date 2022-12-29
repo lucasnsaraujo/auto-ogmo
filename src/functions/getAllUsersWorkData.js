@@ -16,8 +16,8 @@ export async function getAllUsersWorkData() {
       user_password: user?.user_password,
     });
     if (crawledData) {
-      console.log({ crawledData, currentData });
       const currentData = await WorksRepository.findById(user.id);
+      console.log({ crawledData, currentData });
       const statusHasChanged = checkIfDataHasChanged(currentData, crawledData);
       if (statusHasChanged) {
         console.log("> Status has changed.");
