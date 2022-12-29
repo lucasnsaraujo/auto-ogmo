@@ -3,7 +3,6 @@ import TelegramController from "../app/controllers/TelegramController.js";
 import TelegramRepository from "../app/repositories/TelegramRepository.js";
 import UsersRepository from "../app/repositories/UsersRepository.js";
 import WorksRepository from "../app/repositories/WorksRepository.js";
-import { crawlWorkData } from "../functions/crawlWorkData.js";
 
 const isDeployed = !!["production", "development"].includes(
   process.env.CURRENT_ENV
@@ -27,6 +26,10 @@ bot.start(async (ctx) => {
 });
 
 bot.command("registrar", async (ctx) => {
+  const user = await checkIfUserIsActivated(ctx.message.from.id);
+  if (user) {
+    ctx.reply(`Sua conta já está registrada como ${user.name}.`);
+  }
   if (ctx.message.text.trim() === "/registrar") {
     ctx.reply(
       `Para ativar sua conta, digite '/registrar' seguido do seu e-mail cadastrado e seu código de ativação. Exemplo: \n/registrar guilherme@email.com ABC123`
@@ -92,20 +95,25 @@ async function checkIfUserIsActivated(id) {
 function generateTelegramMessage(user, crawledData, type = "status") {
   return `${
     type === "status" ? `🚢 Status Atual!\n` : `🚨 Você foi alocado!\n`
-  }${!!user.name && `- Nome: ${user.name}\n`}${
-    !!crawledData.parede.toString() && `- Parede: ${crawledData.parede}\n`
-  }${!!crawledData.requi.toString() && `- Requi: ${crawledData.requi}\n`}${
-    !!crawledData.operacao.toString() && `- Operação: ${crawledData.operacao}\n`
-  }${!!crawledData.turno.toString() && `- Turno: ${crawledData.turno}\n`}${
-    !!crawledData.ter.toString() && `- Ter: ${crawledData.ter}\n`
-  }${!!crawledData.funcao.toString() && `- Função: ${crawledData.funcao}\n`}${
-    !!crawledData.forma.toString() && `- Forma: ${crawledData.forma}\n`
-  }${!!crawledData.navio.toString() && `- Navio: ${crawledData.navio}\n`}${
-    !!crawledData.ber.toString() && `- Ber: ${crawledData.ber}\n`
-  }${!!crawledData.cais.toString() && `- Cais: ${crawledData.cais}\n`}${
-    !!crawledData.requisitante.toString() &&
-    `- Requisitante: ${crawledData.requisitante}\n`
-  }${!!crawledData.status.toString() && `- Status: ${crawledData.status}\n`}
+  }${!!user.name ? `- Nome: ${user.name}\n` : ""}${
+    !!crawledData.parede.toString() ? `- Parede: ${crawledData.parede}\n` : ""
+  }${!!crawledData.requi.toString() ? `- Requi: ${crawledData.requi}\n` : ""}${
+    !!crawledData.operacao.toString()
+      ? `- Operação: ${crawledData.operacao}\n`
+      : ""
+  }${!!crawledData.turno.toString() ? `- Turno: ${crawledData.turno}\n` : ""}${
+    !!crawledData.ter.toString() ? `- Ter: ${crawledData.ter}\n` : ""
+  }${
+    !!crawledData.funcao.toString() ? `- Função: ${crawledData.funcao}\n` : ""
+  }${!!crawledData.forma.toString() ? `- Forma: ${crawledData.forma}\n` : ""}${
+    !!crawledData.navio.toString() ? `- Navio: ${crawledData.navio}\n` : ""
+  }${!!crawledData.ber.toString() ? `- Ber: ${crawledData.ber}\n` : ""}${
+    !!crawledData.cais.toString() ? `- Cais: ${crawledData.cais}\n` : ""
+  }${
+    !!crawledData.requisitante.toString()
+      ? `- Requisitante: ${crawledData.requisitante}\n`
+      : ""
+  }${!!crawledData.status.toString() ? `- Status: ${crawledData.status}\n` : ""}
   `;
 }
 
