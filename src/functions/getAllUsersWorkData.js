@@ -49,7 +49,7 @@ export async function getAllUsersWorkData() {
 
 const checkIfDataHasChanged = (currentData, crawledData) => {
   if (
-    crawledData?.parede !== currentData?.parede &&
+    crawledData?.status !== currentData?.status &&
     !!crawledData?.parede &&
     !!crawledData.status
   ) {
